@@ -14,9 +14,6 @@ git clone git@github.com:phrdang/cs61a-su26-lec20.git
 
 ## Usage
 
-First, `cd` into either the `blank` or `sol` directory, depending on if you're checking
-your solution or interacting with the staff solution. Then run the command(s) below.
-
 To run the Scheme Tokenizer, run:
 
 ```sh
@@ -29,10 +26,24 @@ To run the Scheme Reader, run:
 uv run python3 scheme_reader.py
 ```
 
-To run the Scheme Calculator, run:
+To run the Scheme Calculator (blank), run:
 
 ```sh
 uv run python3 calc.py
 ```
 
+To run the Scheme Calculator (staff solution), run:
+
+```sh
+uv run python3 calc_sol.py
+```
+
 To exit any of these programs, press `Ctrl + C` or `Ctrl + D` (on both Mac and Windows).
+
+## Testing
+
+Run doctests for any of the Python files with:
+
+```sh
+uv run python3 -m doctest <file>
+```

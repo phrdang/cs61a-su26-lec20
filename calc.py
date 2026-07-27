@@ -56,9 +56,8 @@ def calc_eval(exp):
     if type(exp) in (int, float):
         return simplify(exp)
     if type(exp) is str:
-        if exp in env:
-            return env[exp]
-        raise NameError("Undefined variable " + exp)
+        "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
+        return nil
     elif isinstance(exp, Link):
         if exp.first == "define":
             return do_define_form(exp.rest)
@@ -67,9 +66,26 @@ def calc_eval(exp):
     else:
         raise TypeError(exp + ' is not a primitive or call expression')
 
-def do_define_form(vals):
-    env[vals.first] = calc_eval(vals.rest.first)
-    return vals.first
+def do_define_form(args):
+    """
+    Defines (or redefines) a variable in the global environment,
+    and returns that symbol as a Python string.
+
+    >>> do_define_form(as_scheme_list('x', 5))
+    'x'
+    >>> env['x']
+    5
+    >>> do_define_form(as_scheme_list('x', 10))
+    'x'
+    >>> env['x']
+    10
+    >>> do_define_form(as_scheme_list('y', 2))
+    'y'
+    >>> env['y']
+    2
+    """
+    "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
+    return nil
 
 def calc_apply(operator, args):
     """Apply the named operator to a list of args.
@@ -78,8 +94,14 @@ def calc_apply(operator, args):
     6
     >>> calc_apply('-', as_scheme_list(10, 1, 2, 3))
     4
+    >>> calc_apply('+', nil)
+    0
     >>> calc_apply('*', nil)
     1
+    >>> calc_apply('/', as_scheme_list(5))
+    0.2
+    >>> calc_apply('-', as_scheme_list(2))
+    -2
     >>> calc_apply('*', as_scheme_list(1, 2, 3, 4, 5))
     120
     >>> calc_apply('/', as_scheme_list(40, 5))
@@ -88,31 +110,17 @@ def calc_apply(operator, args):
     if not isinstance(operator, str):
         raise TypeError(str(operator) + ' is not a symbol')
     if operator == '+':
-        return reduce(add, args, 0)
+        "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
+        return 0
     elif operator == '-':
-        if len(args) == 0:
-            raise TypeError(operator + 'requires at least 1 argument')
-        elif len(args) == 1:
-            return -args[0]
-        else:
-            return reduce(sub, args.rest, args.first)
+        "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
+        return 0
     elif operator == '*':
-        return reduce(mul, args, 1)
+        "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
+        return 0
     elif operator == '/':
-        if len(args) == 0:
-            raise TypeError(operator + 'requires at least 1 argument')
-        elif len(args) == 1:
-            return 1 / args[0]
-        else:
-            return reduce(truediv, args.rest, args.first)
-    elif operator == 'quotient':
-        if len(args) != 2:
-            raise TypeError(operator + ' requires exactly 2 arguments')
-        numerator = args[0]
-        denominator = args[1]
-        return floordiv(numerator, denominator)
-    else:
-        raise TypeError(operator + ' is an unknown operator')
+        "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
+        return 0
 
 def simplify(value):
     """Return an int if value is an integer, or value otherwise.
@@ -153,12 +161,12 @@ def as_scheme_list(*args):
 @main
 def read_eval_print_loop():
     """Run a read-eval-print loop for Calculator."""
-    while True:
+    while _________:
         try:
             src = buffer_input('scalc')
             while src.more_on_line:
-                expression = scheme_read(src)
-                print(calc_eval(expression))
+                expression = _________(src)
+                print(_________(expression))
         except (SyntaxError, TypeError, ValueError, ZeroDivisionError, NameError) as err:
             print(type(err).__name__ + ':', err)
         except (KeyboardInterrupt, EOFError):  # <Control>-D, etc.

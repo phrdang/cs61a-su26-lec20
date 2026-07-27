@@ -56,8 +56,9 @@ def calc_eval(exp):
     if type(exp) in (int, float):
         return simplify(exp)
     if type(exp) is str:
-        "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
-        return nil
+        if exp in env:
+            return env[exp]
+        raise NameError("Undefined variable " + exp)
     elif isinstance(exp, Link):
         if exp.first == "define":
             return do_define_form(exp.rest)
@@ -66,9 +67,26 @@ def calc_eval(exp):
     else:
         raise TypeError(exp + ' is not a primitive or call expression')
 
-def do_define_form(args):
-    "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
-    return nil
+def do_define_form(vals):
+    """
+    Defines (or redefines) a variable in the global environment,
+    and returns that symbol as a Python string.
+
+    >>> do_define_form(as_scheme_list('x', 5))
+    'x'
+    >>> env['x']
+    5
+    >>> do_define_form(as_scheme_list('x', 10))
+    'x'
+    >>> env['x']
+    10
+    >>> do_define_form(as_scheme_list('y', 2))
+    'y'
+    >>> env['y']
+    2
+    """
+    env[vals.first] = calc_eval(vals.rest.first)
+    return vals.first
 
 def calc_apply(operator, args):
     """Apply the named operator to a list of args.
@@ -77,8 +95,14 @@ def calc_apply(operator, args):
     6
     >>> calc_apply('-', as_scheme_list(10, 1, 2, 3))
     4
+    >>> calc_apply('+', nil)
+    0
     >>> calc_apply('*', nil)
     1
+    >>> calc_apply('/', as_scheme_list(5))
+    0.2
+    >>> calc_apply('-', as_scheme_list(2))
+    -2
     >>> calc_apply('*', as_scheme_list(1, 2, 3, 4, 5))
     120
     >>> calc_apply('/', as_scheme_list(40, 5))
