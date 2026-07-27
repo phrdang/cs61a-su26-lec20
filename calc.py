@@ -60,8 +60,8 @@ def calc_eval(exp):
         return nil
     elif isinstance(exp, Link):
         if exp.first == "define":
-            return do_define_form(exp.second)
-        arguments = exp.second.map(calc_eval)
+            return do_define_form(exp.rest)
+        arguments = exp.rest.map(calc_eval)
         return simplify(calc_apply(exp.first, arguments))
     else:
         raise TypeError(exp + ' is not a primitive or call expression')
@@ -98,7 +98,7 @@ def calc_apply(operator, args):
         elif len(args) == 1:
             return -args[0]
         else:
-            return reduce(sub, args.second, args.first)
+            return reduce(sub, args.rest, args.first)
     elif operator == '*':
         return reduce(mul, args, 1)
     elif operator == '/':
@@ -131,7 +131,7 @@ def reduce(fn, scheme_list, start):
     """
     if scheme_list is nil:
         return start
-    return reduce(fn, scheme_list.second, fn(start, scheme_list.first))
+    return reduce(fn, scheme_list.rest, fn(start, scheme_list.first))
 
 def as_scheme_list(*args):
     """Return a recursive list of Links that contains the elements of args.
@@ -148,7 +148,7 @@ def read_eval_print_loop():
     """Run a read-eval-print loop for Calculator."""
     while True:
         try:
-            src = buffer_input()
+            src = buffer_input('scalc')
             while src.more_on_line:
                 expression = scheme_read(src)
                 print(calc_eval(expression))

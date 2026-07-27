@@ -163,15 +163,15 @@ def read_tail(src):
 
 # Interactive loop
 
-def buffer_input():
-    return Buffer(tokenize_lines(InputReader('read> ')))
+def buffer_input(prompt: str):
+    return Buffer(tokenize_lines(InputReader(f'{prompt}> ')))
 
 @main
 def read_print_loop():
     """Run a read-print loop for Scheme expressions."""
     while True:
         try:
-            src = buffer_input()
+            src = buffer_input('read')
             while src.more_on_line:
                 expression = scheme_read(src)
                 print(f"str : {expression}")
