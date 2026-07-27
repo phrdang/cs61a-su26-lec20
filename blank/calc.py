@@ -56,9 +56,8 @@ def calc_eval(exp):
     if type(exp) in (int, float):
         return simplify(exp)
     if type(exp) is str:
-        if exp in env:
-            return env[exp]
-        raise NameError("Undefined variable " + exp)
+        "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
+        return nil
     elif isinstance(exp, Link):
         if exp.first == "define":
             return do_define_form(exp.rest)
@@ -67,9 +66,9 @@ def calc_eval(exp):
     else:
         raise TypeError(exp + ' is not a primitive or call expression')
 
-def do_define_form(vals):
-    env[vals.first] = calc_eval(vals.rest.first)
-    return vals.first
+def do_define_form(args):
+    "*** YOUR CODE HERE (replace this entire block, including the return statement) ***"
+    return nil
 
 def calc_apply(operator, args):
     """Apply the named operator to a list of args.

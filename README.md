@@ -14,6 +14,9 @@ git clone git@github.com:phrdang/cs61a-su26-lec20.git
 
 ## Usage
 
+First, `cd` into either the `blank` or `sol` directory, depending on if you're checking
+your solution or interacting with the staff solution. Then run the command(s) below.
+
 To run the Scheme Tokenizer, run:
 
 ```sh
