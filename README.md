@@ -25,3 +25,5 @@ To run the Scheme Reader, run:
 ```sh
 uv run python3 scheme_reader.py
 ```
+
+To exit either of those programs, press `Ctrl + C` or `Ctrl + D` (on both Mac and Windows).
