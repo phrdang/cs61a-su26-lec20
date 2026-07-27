@@ -2,46 +2,46 @@ from ucb import main, trace, interact
 from scheme_tokens import tokenize_lines, DELIMITERS
 from buffer import Buffer, InputReader
 
-# Pairs and Scheme lists
+# Links and Scheme lists
 
-class Pair:
-    """A pair has two instance attributes: first and second. Second must be a Pair or nil
+class Link:
+    """A link has two instance attributes: first and rest. Second must be a Link or nil
 
-    >>> s = Pair(1, Pair(2, nil))
+    >>> s = Link(1, Link(2, nil))
     >>> s
-    Pair(1, Pair(2, nil))
+    Link(1, Link(2, nil))
     >>> print(s)
     (1 2)
     >>> len(s)
     2
     >>> s[1]
     2
-    >>> print(s.map(lambda x: x+4))
+    >>> print(s.map(lambda x: x + 4))
     (5 6)
     """
-    def __init__(self, first, second):
-        assert isinstance(second, Pair) or second is nil
+    def __init__(self, first, rest):
+        assert isinstance(rest, Link) or rest is nil
         self.first = first
-        self.second = second
+        self.rest = rest
 
     def __repr__(self):
-        return "Pair({0}, {1})".format(repr(self.first), repr(self.second))
+        return "Link({0}, {1})".format(repr(self.first), repr(self.rest))
 
     def __str__(self):
         s = "(" + str(self.first)
-        second = self.second
-        while isinstance(second, Pair):
-            s += " " + str(second.first)
-            second = second.second
-        assert second is nil
+        rest = self.rest
+        while isinstance(rest, Link):
+            s += " " + str(rest.first)
+            rest = rest.rest
+        assert rest is nil
         return s + ")"
 
     def __len__(self):
-        n, second = 1, self.second
-        while isinstance(second, Pair):
+        n, rest = 1, self.rest
+        while isinstance(rest, Link):
             n += 1
-            second = second.second
-        if second is not nil:
+            rest = rest.rest
+        if rest is not nil:
             raise TypeError("length attempted on improper list")
         return n
 
@@ -50,15 +50,15 @@ class Pair:
             raise IndexError("negative index into list")
         y = self
         for _ in range(k):
-            if y.second is nil:
+            if y.rest is nil:
                 raise IndexError("list index out of bounds")
-            y = y.second
+            y = y.rest
         return y.first
 
     def map(self, fn):
         """Return a Scheme list after mapping Python function FN to SELF."""
         mapped = fn(self.first)
-        return Pair(mapped, self.second.map(fn))
+        return Link(mapped, self.rest.map(fn))
 
 class nil:
     """The empty list"""
@@ -122,7 +122,7 @@ def scheme_read(src):
         #Note that this isn't the best idea of what to do.
         #We have to add this semi-hack because we're modifying the language
         #in a strange way to get infix notation.
-        if val.second == nil and val.first != nil:
+        if val.rest == nil and val.first != nil:
             val = val.first
 
         "***YOUR CODE HERE***"
@@ -135,9 +135,9 @@ def read_infix(first, src):
     """Returns a scheme expression which represents the equivalent scheme expression
         to the given infix expression
     >>> read_infix(3, Buffer(tokenize_lines("+ 4 5")))
-    Pair('+', Pair(3, Pair(4, nil)))
+    Link('+', Link(3, Link(4, nil)))
     >>> read_infix(2, Buffer(tokenize_lines("+ (* 3 4) 7")))
-    Pair('+', Pair(2, Pair(Pair('*', Pair(3, Pair(4, nil))), nil)))
+    Link('+', Link(2, Link(Link('*', Link(3, Link(4, nil))), nil)))
     """
     "***YOUR CODE HERE***"
 
@@ -147,9 +147,9 @@ def read_tail(src):
     >>> read_tail(Buffer(tokenize_lines([')'])))
     nil
     >>> read_tail(Buffer(tokenize_lines(['2 3)'])))
-    Pair(2, Pair(3, nil))
+    Link(2, Link(3, nil))
     >>> read_tail(Buffer(tokenize_lines(['2 (3 4))'])))
-    Pair(2, Pair(Pair(3, Pair(4, nil)), nil))
+    Link(2, Link(Link(3, Link(4, nil)), nil))
     """
     if src.current() is None:
         raise SyntaxError("unexpected end of file")
@@ -158,7 +158,7 @@ def read_tail(src):
         return nil
     first = scheme_read(src)
     rest = read_tail(src)
-    return Pair(first, rest)
+    return Link(first, rest)
 
 
 # Interactive loop
