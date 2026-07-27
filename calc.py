@@ -31,7 +31,7 @@ Examples:
 """
 
 from ucb import main
-from operator import add, sub, mul, truediv
+from operator import add, sub, mul, truediv, floordiv
 from scheme_reader import Link, nil, scheme_read, buffer_input
 
 
@@ -108,6 +108,12 @@ def calc_apply(operator, args):
             return 1 / args[0]
         else:
             return reduce(truediv, args.rest, args.first)
+    elif operator == 'quotient':
+        if len(args) != 2:
+            raise TypeError(operator + ' requires exactly 2 arguments')
+        numerator = args[0]
+        denominator = args[1]
+        return floordiv(numerator, denominator)
     else:
         raise TypeError(operator + ' is an unknown operator')
 
@@ -157,5 +163,5 @@ def read_eval_print_loop():
         except (SyntaxError, TypeError, ValueError, ZeroDivisionError) as err:
             print(type(err).__name__ + ':', err)
         except (KeyboardInterrupt, EOFError):  # <Control>-D, etc.
-            print('Calculation completed.')
+            print('Exiting Scheme Calculator...')
             return
