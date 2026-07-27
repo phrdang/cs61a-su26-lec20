@@ -82,20 +82,6 @@ class nil:
 
 nil = nil() # Assignment hides the nil class; there is only one instance
 
-
-def next_is_op(src):
-    """Returns whether the next item is an operator
-    >>> lines = ["+ 2 3"]
-    >>> src = Buffer(tokenize_lines(lines))
-    >>> next_is_op(src)
-    True
-    >>> lines = ["3"]
-    >>> src = Buffer(tokenize_lines(lines))
-    >>> next_is_op(src)
-    False
-    """
-    "***YOUR CODE HERE***"
-
 # Scheme list parser, without quotation or dotted lists.
 
 def scheme_read(src):
@@ -112,34 +98,22 @@ def scheme_read(src):
     if val == 'nil':
         return nil
     elif type(val) in (float, int):
-        "***YOUR CODE HERE***"
         return val
     elif val not in DELIMITERS:  # ( ) ' .
         return val
     elif val == "(":
         val = read_tail(src)
 
-        #Note that this isn't the best idea of what to do.
-        #We have to add this semi-hack because we're modifying the language
-        #in a strange way to get infix notation.
-        if val.rest == nil and val.first != nil:
-            val = val.first
+        # #Note that this isn't the best idea of what to do.
+        # #We have to add this semi-hack because we're modifying the language
+        # #in a strange way to get infix notation.
+        # if val.rest == nil and val.first != nil:
+        #     val = val.first
 
-        "***YOUR CODE HERE***"
+        # "***YOUR CODE HERE***"
         return val
     else:
         raise SyntaxError("unexpected token: {0}".format(val))
-
-
-def read_infix(first, src):
-    """Returns a scheme expression which represents the equivalent scheme expression
-        to the given infix expression
-    >>> read_infix(3, Buffer(tokenize_lines("+ 4 5")))
-    Link('+', Link(3, Link(4, nil)))
-    >>> read_infix(2, Buffer(tokenize_lines("+ (* 3 4) 7")))
-    Link('+', Link(2, Link(Link('*', Link(3, Link(4, nil))), nil)))
-    """
-    "***YOUR CODE HERE***"
 
 def read_tail(src):
     """Return the remainder of a list in src, starting before an element or ).
