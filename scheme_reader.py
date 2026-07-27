@@ -1,4 +1,4 @@
-from ucb import main, trace, interact
+from ucb import main
 from scheme_tokens import tokenize_lines, DELIMITERS
 from buffer import Buffer, InputReader
 

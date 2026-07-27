@@ -30,8 +30,8 @@ Examples:
     ZeroDivisionError: division by zero
 """
 
-from ucb import trace, main, interact
-from operator import add, sub, mul
+from ucb import main
+from operator import add, sub, mul, truediv
 from scheme_reader import Link, nil, scheme_read, buffer_input
 
 
@@ -102,10 +102,12 @@ def calc_apply(operator, args):
     elif operator == '*':
         return reduce(mul, args, 1)
     elif operator == '/':
-        if len(args) != 2:
-            raise TypeError(operator + ' requires exactly 2 arguments')
-        numer, denom = args
-        return numer/denom
+        if len(args) == 0:
+            raise TypeError(operator + 'requires at least 1 argument')
+        elif len(args) == 1:
+            return 1 / args[0]
+        else:
+            return reduce(truediv, args.rest, args.first)
     else:
         raise TypeError(operator + ' is an unknown operator')
 
