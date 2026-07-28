@@ -11,6 +11,7 @@ of tokens.  A token may be:
 import string
 import sys
 from ucb import main
+from typing import Generator, Tuple, Union
 
 _SYMBOL_STARTS = set('!$%&*/:<=>?@^_~') | set(string.ascii_lowercase)
 _SYMBOL_INNERS = _SYMBOL_STARTS | set(string.digits) | set('+-.')
@@ -20,7 +21,7 @@ _SINGLE_CHAR_TOKENS = set("()'")
 _TOKEN_END = _WHITESPACE | _SINGLE_CHAR_TOKENS
 DELIMITERS = _SINGLE_CHAR_TOKENS | {'.'}
 
-def valid_symbol(s):
+def valid_symbol(s: str) -> bool:
     """Returns whether s is not a well-formed value."""
     if len(s) == 0 or s[0] not in _SYMBOL_STARTS:
         return False
@@ -29,7 +30,7 @@ def valid_symbol(s):
             return False
     return True
 
-def next_candidate_token(line, k):
+def next_candidate_token(line: str, k: int) -> Tuple[str | None, int]:
     """A tuple (tok, k'), where tok is the next substring of line at or
     after position k that could be a token (assuming it passes a validity
     check), and k' is the position in line following that token.  Returns
@@ -51,7 +52,7 @@ def next_candidate_token(line, k):
             return line[k:j], min(j, len(line))
     return None, len(line)
 
-def tokenize_line(line):
+def tokenize_line(line: str) -> list[Union[int, float, str, bool]]:
     """The list of Scheme tokens on line.  Excludes comments and whitespace."""
     result = []
     text, i = next_candidate_token(line, 0)
@@ -83,7 +84,7 @@ def tokenize_line(line):
         text, i = next_candidate_token(line, i)
     return result
 
-def tokenize_lines(input):
+def tokenize_lines(input: str) -> Generator[str]:
     """An iterator that returns lists of tokens, one for each line of the
     iterable input sequence."""
     return (tokenize_line(line) for line in input)

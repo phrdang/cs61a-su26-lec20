@@ -1,6 +1,7 @@
 from ucb import main
 from scheme_tokens import tokenize_lines, DELIMITERS
 from buffer import Buffer, InputReader
+from typing import Union
 
 # Links and Scheme lists
 
@@ -84,7 +85,7 @@ nil = nil() # Assignment hides the nil class; there is only one instance
 
 # Scheme list parser, without quotation or dotted lists.
 
-def scheme_read(src):
+def scheme_read(src: Buffer) -> Union[int, float, str, Link]:
     """Read the next expression from src, a Buffer of tokens.
 
     >>> lines = ['(+ 1 ', '(+ 23 4)) (']
@@ -103,19 +104,11 @@ def scheme_read(src):
         return val
     elif val == "(":
         val = read_tail(src)
-
-        # #Note that this isn't the best idea of what to do.
-        # #We have to add this semi-hack because we're modifying the language
-        # #in a strange way to get infix notation.
-        # if val.rest == nil and val.first != nil:
-        #     val = val.first
-
-        # "***YOUR CODE HERE***"
         return val
     else:
         raise SyntaxError("unexpected token: {0}".format(val))
 
-def read_tail(src):
+def read_tail(src: Buffer) -> Link:
     """Return the remainder of a list in src, starting before an element or ).
 
     >>> read_tail(Buffer(tokenize_lines([')'])))
@@ -137,7 +130,7 @@ def read_tail(src):
 
 # Interactive loop
 
-def buffer_input(prompt: str):
+def buffer_input(prompt: str) -> Buffer:
     return Buffer(tokenize_lines(InputReader(f'{prompt}> ')))
 
 @main
